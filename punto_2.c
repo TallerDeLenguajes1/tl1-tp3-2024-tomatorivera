@@ -9,7 +9,7 @@ int main() {
     srand(time(NULL));
 
     int produccion[filas][columnas];
-    int min = 10000, max = 50000, suma = 0, anio, mes, mayor = 0;
+    int min = 10000, max = 50000, suma = 0, anioMayor, mesMayor, anioMenor, mesMenor, mayor = 0, menor = max+1;
     float promedio;
 
     for (int i=0 ; i<filas ; i++)
@@ -21,13 +21,19 @@ int main() {
             // Apartado b - Mostrar valores por pantalla
             printf("%d ", produccion[i][j]);
 
-            // Apartado d - Calcular mayor cantidad de ventas
+            // Apartado d - Calcular mayor y menor cantidad de ventas
             if (produccion[i][j] > mayor)
             {
                 mayor = produccion[i][j];
-                mes = j+1;
-                anio = i+1;
+                mesMayor = j+1;
+                anioMayor = i+1;
             }
+            if (produccion[i][j] < menor)
+            {
+                menor = produccion[i][j];
+                mesMenor = j+1;
+                anioMenor = i+1;
+            } 
         }
         printf("\n");
     }
@@ -46,11 +52,16 @@ int main() {
         suma = 0;
     }
 
-    // Apartado d - Calcular mayor cantidad de ventas
+    // Apartado d - Calcular mayor y menor cantidad de ventas
     printf("\n\nLa mayor cantidad de ventas fueron: %d en el anio %d y mes %d",
         mayor,
-        anio,
-        mes
+        anioMayor,
+        mesMayor
+    );
+    printf("\nLa menor cantidad de ventas fueron: %d en el anio %d y mes %d",
+        menor,
+        anioMenor,
+        mesMenor
     );
 
     return 0;
