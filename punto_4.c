@@ -27,6 +27,8 @@ struct Cliente {
 void cargarClientes(Cliente *clientes, int nClientes);
 void cargarProductos(Producto *productos, int nProductos);
 float calcularCostoTotal(Producto producto);
+void mostrarClientes(Cliente *clientes, int nClientes);
+void mostrarProductos(Producto *productos, int nProductos);
 
 int main()
 {
@@ -58,6 +60,9 @@ int main()
     printf("\nCliente: %d - Producto %s (ID %d)", cliente.ClienteID, producto.TipoProducto, producto.ProductoID);
     printf("\n\tPrecio unitario: $%.2f - Cantidad: %d | Costo total: $%.2f", producto.PrecioUnitario, producto.Cantidad, precio);
 
+    // Apartado v - Mostrar datos de clientes y productos
+    mostrarClientes(clientes, nClientes);
+
     free(clientes);
     return 0;
 }
@@ -77,7 +82,7 @@ void cargarClientes(Cliente *clientes, int nClientes) {
 
         // Nombre del cliente
         fflush(stdin);
-        printf("\n\nIngrese el nombre del cliente %d: ", (i+1));
+        printf("\nIngrese el nombre del cliente %d: ", (i+1));
         gets(buff);
         clientes[i].NombreCliente = malloc((strlen(buff) + 1) * sizeof(char));
         strcpy(clientes[i].NombreCliente, buff);
@@ -85,13 +90,6 @@ void cargarClientes(Cliente *clientes, int nClientes) {
         // Cantidad de productos a pedir
         int nProductos = 1 + rand() % 5;
         clientes[i].CantidadProductosAPedir = nProductos;
-
-        // Muestro en pantalla los datos del cliente para hacer un seguimiento de como va la carga de datos
-        printf("CLIENTE %d: ", (i+1));
-        printf("\n\tNombre: %s \n\tProductos asociados: %d", 
-            clientes[i].NombreCliente,
-            nProductos
-        );
 
         // Carga de productos
         clientes[i].Productos = (Producto *)malloc(nProductos * sizeof(Producto));
@@ -105,7 +103,6 @@ void cargarClientes(Cliente *clientes, int nClientes) {
 void cargarProductos(Producto *productos, int nProductos) {
     int ultimoIdProducto = 1;
 
-    printf("\n\tProductos: ");
     for (int i=0 ; i<nProductos ; i++)
     {
         // ID
@@ -120,14 +117,6 @@ void cargarProductos(Producto *productos, int nProductos) {
 
         // Precio unitario
         productos[i].PrecioUnitario = 10 + rand() % 91;
-
-        // Muestro por pantalla los datos del producto para hacer un seguimiento de como va la carga de datos
-        printf("\n\t\tID: %d - CANTIDAD: %d - TIPO PRODUCTO: %s - PRECIO: $%.2f",
-            productos[i].ProductoID,
-            productos[i].Cantidad,
-            productos[i].TipoProducto,
-            productos[i].PrecioUnitario
-        );
     }
 }
 
@@ -136,4 +125,37 @@ void cargarProductos(Producto *productos, int nProductos) {
  */
 float calcularCostoTotal(Producto producto) {
     return producto.Cantidad * producto.PrecioUnitario;
+}
+
+/**
+ * Muestra los datos de los clientes y sus productos
+ */
+void mostrarClientes(Cliente *clientes, int nClientes) {
+    for (int i=0 ; i<nClientes ; i++)
+    {
+        Cliente c = clientes[i];
+
+        // Muestro en pantalla los datos del cliente
+        printf("\n\nCLIENTE ID: %d ", c.ClienteID);
+        printf("\n- Nombre: %s", c.NombreCliente);
+        printf("\n- Productos asociados: %d", c.CantidadProductosAPedir);
+        printf("\n- Productos:");
+        mostrarProductos(c.Productos, c.CantidadProductosAPedir);
+    }
+}
+
+/**
+ * Muestra los datos de los productos de un cliente
+ */
+void mostrarProductos(Producto *productos, int nProductos) {
+    for (int j=0 ; j < nProductos ; j++)
+    {
+        Producto p = productos[j];
+
+        // Muestro en pantalla los datos del producto
+        printf("\n\tPRODUCTO ID: %d", p.ProductoID);
+        printf("\n\t\t* Tipo de producto: %s", p.TipoProducto);
+        printf("\n\t\t* Precio unitario: $%.2f", p.PrecioUnitario);
+        printf("\n\t\t* Cantidad solicitada: %d", p.Cantidad);
+    }
 }
