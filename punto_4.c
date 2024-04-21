@@ -25,7 +25,8 @@ struct Cliente {
 
 // Funciones
 void cargarClientes(Cliente *clientes, int nClientes);
-void cargarProductos(Producto *prudctos, int nProductos);
+void cargarProductos(Producto *productos, int nProductos);
+float calcularCostoTotal(Producto producto);
 
 int main()
 {
@@ -35,15 +36,27 @@ int main()
     // entre 1 y 5 ya que en el enunciado dice que un preventista puede tener hasta 5 clientes
     int nClientes;
     do {
+        // Para que si el usuario ingresa una letra, no quede en bucle infinito el programa
+        fflush(stdin);
+
         printf("Ingrese la cantidad de clientes: ");
         scanf("%d", &nClientes);
-
+        
         if (nClientes <= 0 || nClientes > 5) printf("[!] Ingrese una cantidad de clientes valida (entre 1 y 5 inclusive)\n");
     } while (nClientes <= 0 || nClientes > 5);
 
-    // Apartado ii - Cargar los datos de los clientes
+    // Apartado ii/iii - Cargar los datos de los clientes y sus productos
     Cliente *clientes = (Cliente *)malloc(nClientes * sizeof(Cliente));
     cargarClientes(clientes, nClientes);
+
+    // Apartado iv - Calcular costo total de un producto
+    Cliente cliente = clientes[0];
+    Producto producto = cliente.Productos[0];
+
+    float precio = calcularCostoTotal(producto);
+    printf("\n\n===== Costo total del producto =====");
+    printf("\nCliente: %d - Producto %s (ID %d)", cliente.ClienteID, producto.TipoProducto, producto.ProductoID);
+    printf("\n\tPrecio unitario: $%.2f - Cantidad: %d | Costo total: $%.2f", producto.PrecioUnitario, producto.Cantidad, precio);
 
     free(clientes);
     return 0;
@@ -109,11 +122,18 @@ void cargarProductos(Producto *productos, int nProductos) {
         productos[i].PrecioUnitario = 10 + rand() % 91;
 
         // Muestro por pantalla los datos del producto para hacer un seguimiento de como va la carga de datos
-        printf("\n\t\tID: %d - CANTIDAD: %d - TIPO PRODUCTO: %s - PRECIO: %.2f",
+        printf("\n\t\tID: %d - CANTIDAD: %d - TIPO PRODUCTO: %s - PRECIO: $%.2f",
             productos[i].ProductoID,
             productos[i].Cantidad,
             productos[i].TipoProducto,
             productos[i].PrecioUnitario
         );
     }
+}
+
+/**
+ * Calcula el costo total de un producto
+ */
+float calcularCostoTotal(Producto producto) {
+    return producto.Cantidad * producto.PrecioUnitario;
 }
